@@ -1,0 +1,31 @@
+--
+-- NETBOTZ-MIB       module definition
+--
+NETBOTZ-MIB DEFINITIONS ::= BEGIN
+IMPORTS
+
+   enterprises FROM RFC1155-SMI;
+
+netBotz					OBJECT IDENTIFIER
+							::= { enterprises 5528 }
+
+netBotz-reg				OBJECT IDENTIFIER
+							::= { netBotz 10 }
+
+netBotz-generic			OBJECT IDENTIFIER
+							::= { netBotz 20 }
+
+netBotz-products		OBJECT IDENTIFIER
+							::= { netBotz 30 }
+
+netBotz-snmp			OBJECT IDENTIFIER
+							::= { netBotz 40 }
+
+netBotz-device			OBJECT IDENTIFIER
+							::= { netBotz 50 }
+
+END
+
+
+
+
