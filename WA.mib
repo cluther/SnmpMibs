@@ -1,0 +1,903 @@
+-- File Name : wa.mib
+
+WA      DEFINITIONS ::= BEGIN
+        IMPORTS
+                enterprises, MODULE-IDENTITY, OBJECT-TYPE, Counter64
+                        FROM SNMPv2-SMI;
+
+        f5        MODULE-IDENTITY
+                LAST-UPDATED    "200706051600Z"
+                ORGANIZATION    "F5 Networks"
+                CONTACT-INFO    "support@f5.com"
+                DESCRIPTION             
+                                "This contains the basic system monitoring elements for the entire WA system."
+                REVISION                "200706051600Z"
+                DESCRIPTION             
+                              ""
+                ::=  {  enterprises  3375  }
+
+        org                     OBJECT IDENTIFIER       ::=  {  iso  3  }
+        dod                     OBJECT IDENTIFIER       ::=  {  org  6  }
+        internet                OBJECT IDENTIFIER       ::=  {  dod  1  }
+        private                 OBJECT IDENTIFIER       ::=  {  internet  4  }
+        enterprises             OBJECT IDENTIFIER       ::=  {  private   1  }
+	pvsystem                OBJECT IDENTIFIER       ::=  {  f5        14 }
+        basicInfo               OBJECT IDENTIFIER       ::=  {  pvsystem  1  }
+        comm                    OBJECT IDENTIFIER       ::=  {  pvsystem  2  }
+        pvac                    OBJECT IDENTIFIER       ::=  {  pvsystem  4  }
+        errors                  OBJECT IDENTIFIER       ::=  {  pvsystem  6  }
+        javaInfo                OBJECT IDENTIFIER       ::=  {  pvsystem  7  }
+
+        startTime       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The time that the process started (as a string)"
+                ::=  {  basicInfo  1  }
+
+        buildVer        OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The build version of the process"
+                ::=  {  basicInfo  2  }
+
+        buildLatestLoc  OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The latest source control change number in the local environment in which the build took place"
+                ::=  {  basicInfo  3  }
+
+        buildLatestGlob OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The latest source control change number in the global environment during which the build took place"
+                ::=  {  basicInfo  4  }
+
+        configVer       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The config file version"
+                ::=  {  basicInfo  5  }
+
+        logLevel        OBJECT-TYPE     
+                SYNTAX                  Integer32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The logging level of the process"
+                ::=  {  basicInfo  6  }
+
+        commSysInfo     OBJECT IDENTIFIER
+                ::=  {  comm  1  }
+
+        commMsgCounts   OBJECT IDENTIFIER
+                ::=  {  comm  2  }
+
+        pvacSysInfo     OBJECT IDENTIFIER
+                ::=  {  pvac  1  }
+
+        pvacCacheStats  OBJECT IDENTIFIER
+                ::=  {  pvac  3  }
+
+        pvacImc OBJECT IDENTIFIER
+                ::=  {  pvac  4  }
+
+        pvacChangeLogStats OBJECT IDENTIFIER
+                ::=  {  pvac  5  }
+
+        javaII OBJECT IDENTIFIER
+                ::=  {  javaInfo  1  }
+
+        thisNetID       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The WA Network ID"
+                ::=  {  commSysInfo  1  }
+
+        insecurePort    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Insecure port that the process is listening on"
+                ::=  {  commSysInfo  2  }
+
+        securePort      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Secure port that the process is listening on"
+                ::=  {  commSysInfo  3  }
+
+        primParentNetID OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The Network ID of the primary parent"
+                ::=  {  commSysInfo  4  }
+
+        activeParentNetID       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The Network ID of the active parent"
+                ::=  {  commSysInfo  5  }
+
+        numListenerFD   OBJECT-TYPE     
+                SYNTAX                  Unsigned32 
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of listening active file descriptors in the comm system"
+                DEFVAL                  { 0 }
+                ::=  {  commSysInfo  6  }
+
+        msgQueueDepth   OBJECT-TYPE     
+                SYNTAX                  Unsigned32 
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The depth of the standard message queue in the comm system"
+                DEFVAL                  { 0 }
+                ::=  {  commSysInfo  7  }
+
+        postQueueDepth  OBJECT-TYPE     
+                SYNTAX                  Unsigned32 
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The depth of the postponed message queue"
+                DEFVAL                  { 0 }
+                ::=  {  commSysInfo  8  }
+
+        groupList       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "A space separated list of the groups that this process belongs to"
+                ::=  {  commSysInfo  9  }
+
+        numHosts        OBJECT-TYPE     
+                SYNTAX                  Unsigned32 
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of hosts that this process is connected to including both its parent and itself."
+                DEFVAL                  { 0 }
+                ::=  {  commSysInfo  10  }
+
+        numInfoSent     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of info messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  1  }
+
+        numInfoRecv     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of info messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  2  }
+
+        numQuerySent    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of query messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  3  }
+
+        numQueryRecv    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of query messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  4  }
+
+        numReplySent    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of reply messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  5  }
+
+        numReplyRecv    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of reply messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  6  }
+
+        numHealthSent   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of health messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  7  }
+
+        numHealthRecv   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of health messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  8  }
+
+        numAckSent      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of ack messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  9  }
+
+        numAckRecv      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of ack messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  10  }
+
+        numFileSndSent  OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of file send messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  11  }
+
+        numFileSndRecv  OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of file send messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  12  }
+
+        numFileRecSent  OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of file receive messages sent"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  13  }
+
+        numFileRecRecv  OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of file receive messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  14  }
+
+        numDupRecv      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of duplicate messages received"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  15  }
+
+        numExpired      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of expire messages processed"
+                DEFVAL                  { 0 }
+                ::=  {  commMsgCounts  16  }
+
+        numActiveThreads        OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of active threads in the system"
+                ::=  {  pvacSysInfo  1  }
+
+        numReqAccepted  OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of requests accepted"
+                ::=  {  pvacSysInfo  2  }
+
+        numPendingReq   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of pending requests"
+                ::=  {  pvacSysInfo  3  }
+
+        sharedFlags     OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The shared flags set in the process"
+                ::=  {  pvacSysInfo  4  }
+
+        numActiveConn   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of active connections in the system"
+                ::=  {  pvacSysInfo  5  }
+
+        numReqRejected  OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of requests rejected in the system"
+                ::=  {  pvacSysInfo  6  }
+
+        proxyServerAvailable    OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Availability of the proxy server.  1 Yes, 0 No"
+                ::=  {  pvacSysInfo  7  }
+
+        numRespServed OBJECT-TYPE       
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of responses served"
+                ::=  {  pvacSysInfo  8  }
+
+        
+        pvacCustomerInfoTable   OBJECT-TYPE
+                SYNTAX          SEQUENCE  OF  pvacCustomerInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "Basic customer info."
+                ::=  { pvac  2 }
+
+        pvacCustomerInfoEntry   OBJECT-TYPE
+                SYNTAX          pvacCustomerInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "Basic customer info."
+                INDEX { cusName, cusId, stagVerNum, stagLogCount, stagLogLineCount, liveVerNum, liveLogCount, liveLogLineCount}
+                ::=  { pvacCustomerInfoTable 1 }
+
+        pvacCustomerInfoEntryTableType  ::=  SEQUENCE {
+                cusName OCTET STRING,
+                cusId Counter64,
+                stagVerNum Counter64,
+                liveVerNum Counter64        
+                }
+
+        cusName         OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Customer name."
+                ::=  {  pvacCustomerInfoEntry  1  }
+                
+        cusId           OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Customer id."
+                ::=  {  pvacCustomerInfoEntry  2  }
+
+        verNum              OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The config version number."
+                ::=  {  pvacCustomerInfoEntry  3  }
+
+        logCount            OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of log files written out."
+                ::=  {  pvacCustomerInfoEntry  4  }
+		
+        logLineCount       OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of log files entries written out."
+                ::=  {  pvacCustomerInfoEntry  5  }
+		
+        proxyCount      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of proxies so far"
+                ::=  {  pvacCacheStats  1  }
+
+        imcHitCount     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of hits in the IMC"
+                ::=  {  pvacCacheStats  2  }
+
+        hdsHitCount     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of hits in the HDS"
+                ::=  {  pvacCacheStats  3  }
+
+        numActiveParses OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of active parses in the system at a given time"
+                ::=  {  pvacCacheStats  4  }
+
+        numActiveProxies        OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of active proxies in the system at any given time."
+                ::=  {  pvacCacheStats  5  }
+        
+        sizeCompileQueue        OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of responses in the compile queue waiting to get compiled"
+                ::=  {  pvacCacheStats  6  }
+
+        sizeEsiCompileQueue     OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of esi responses in the esi compile queue waiting to get compiled"
+                ::=  {  pvacCacheStats  7  }
+
+        sizeAssembleQueue       OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of pivlets in the assemble queue waiting to get assembled"
+                ::=  {  pvacCacheStats  8  }
+
+        numPendingProxies        OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of proxies pending in the system at any given time."
+                ::=  {  pvacCacheStats  9  }
+
+        pvacImcBasic    OBJECT IDENTIFIER
+                ::=  {  pvacImc  1  }
+
+        pvacImcConfig   OBJECT IDENTIFIER
+                ::=  {  pvacImc  2  }
+
+        pvacImcScrub    OBJECT IDENTIFIER
+                ::=  {  pvacImc  3  }
+
+        pvacImcMemCache OBJECT IDENTIFIER
+                ::=  {  pvacImc  4  }
+
+        invHashCount  OBJECT-TYPE
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                ::=  {  javaII 1        }
+
+        invHashTable    OBJECT-TYPE
+                SYNTAX          SEQUENCE  OF  invHashRow
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "Basic customer info."
+                ::=  { javaII  2 }
+
+        invHashRow  ::=  SEQUENCE {
+                stagVerNum Unsigned32,
+                }
+
+        maxItemSize     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                ::=  {  pvacImcBasic  1  }
+
+        numPoolPops     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                ::=  {  pvacImcBasic  2  }
+
+        numPoolPushes   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcBasic  3  }
+
+        numHitDrop      OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcBasic  4  }
+
+        configBuckets   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcConfig  1  }
+
+        configMutexes   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcConfig  2  }
+
+        configScrubSleep        OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcConfig  3  }
+
+        configFootprint OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcConfig  4  }
+
+        configMaxItem   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcConfig  5  }
+
+        scrubTime       OBJECT-TYPE     
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcScrub  1  }
+
+        scrubVarianceSums       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcScrub  2  }
+
+        scrubVisitCount OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcScrub  3  }
+
+        scrubHitCount   OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcScrub  4  }
+
+        scrubMissCount  OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcScrub  5  }
+
+        lruLength       OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  1  }
+
+        lruItemBulk     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  2  }
+
+        lruHits OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  3  }
+
+        lruAdds OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  4  }
+
+        lruCuts OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  5  }
+
+        lruDups OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  6  }
+
+        lruPops OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description"
+                ::=  {  pvacImcMemCache  7  }
+
+
+        changeLogRecordCount OBJECT-TYPE
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION
+                    "Number of change records written."
+                ::=  {  pvacChangeLogStats  1  }
+
+        sumOfCounts          OBJECT-TYPE
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION
+                    "Sum of counts of all records written."
+                ::=  {  pvacChangeLogStats  2  }
+
+        changeLogFileCount   OBJECT-TYPE
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION
+                    "Number of change log files written."
+                ::=  {  pvacChangeLogStats  3  }
+
+        commConnInfoTable       OBJECT-TYPE
+                SYNTAX          SEQUENCE  OF  commConnInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "Description"
+                ::=  { comm  3 }
+
+        commConnInfoEntry       OBJECT-TYPE
+                SYNTAX          commConnInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "The comm status values for various connected servers"
+                INDEX { connNetID, connIpAddr, connPortNum, connLastContactTime, connGroupUpList, connGroupDownList, connSendFailNum, connHostType, connAltList }
+                ::=  { commConnInfoTable 1 }
+
+        commConnInfoEntryTableType  ::=  SEQUENCE {
+                connNetID  OCTET STRING,
+                connIpAddr  OCTET STRING,
+                connPortNum  Unsigned32,
+                connLastContactTime  OCTET STRING,
+                connGroupUpList  OCTET STRING,
+                connGroupDownList  OCTET STRING,
+                connSendFailNum  Unsigned32,
+                connHostType  OCTET STRING
+                connAltList OCTET STRING
+                }
+
+
+        connNetID       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Column Description The network ID of the connected process"
+                ::=  {  commConnInfoEntry  1  }
+
+
+        connIpAddr      OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The IP address of the connected process"
+                ::=  {  commConnInfoEntry  2  }
+
+
+        connPortNum     OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The port number that the connected process is listening on (for the same security mode as the current connection with the process)"
+                ::=  {  commConnInfoEntry  3  }
+
+
+        connLastContactTime     OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The time that this process last heard from or contacted the connected process"
+                ::=  {  commConnInfoEntry  4  }
+
+
+        connGroupUpList OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The list of groups that the connected process will route up"
+                ::=  {  commConnInfoEntry  5  }
+
+        connGroupDownList       OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The list of groups that the connected process will route down"
+                ::=  {  commConnInfoEntry  6  }
+
+        connSendFailNum OBJECT-TYPE     
+                SYNTAX                  Unsigned32
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "The number of times that we encountered a failure (at the network layer) while communicating with the connected process"
+                ::=  {  commConnInfoEntry  7  }
+
+
+        connHostType    OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "A space separated list of values describing the connected process, connection type, etc."
+                ::=  {  commConnInfoEntry  8  }
+
+        connAltList     OBJECT-TYPE     
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "A space separated list of known alternate hosts for this host"
+                ::=  {  commConnInfoEntry  9  }
+
+        errorStatsInfoTable     OBJECT-TYPE
+                SYNTAX          SEQUENCE OF errorStatsInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION
+                        "pvsystem error statistics."
+                ::= { errors 1 }
+
+        errorStatsInfoEntry     OBJECT-TYPE
+                SYNTAX          errorStatsInfoEntryTableType
+                MAX-ACCESS      not-accessible
+                STATUS          current
+                DESCRIPTION     
+                        "pvsystem error statistics."
+                INDEX { errorCode, errorCount, errorDesc }
+                ::= { errorStatsInfoTable 1 }
+            
+        errorStatsInfoEntryTableType ::= SEQUENCE {
+                errorCode Counter64,
+                errorCount Counter64,
+                errorDesc OCTET STRING
+                }
+
+        errorCode             OBJECT-TYPE
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Error code."
+                ::= { errorStatsInfoEntry 1 }
+
+        errorCount            OBJECT-TYPE
+                SYNTAX                  Counter64
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Count of error code happened. "
+                ::= { errorStatsInfoEntry 2 }
+
+        errorDesc             OBJECT-TYPE
+                SYNTAX                  OCTET STRING
+                MAX-ACCESS              read-only
+                STATUS                  current
+                DESCRIPTION             
+                                "Description of error code."
+                ::= { errorStatsInfoEntry 3 }
+
+END
+
